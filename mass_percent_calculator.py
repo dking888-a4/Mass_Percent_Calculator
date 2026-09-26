@@ -8,10 +8,40 @@ Purpose: This program will calculate amount of a compound and a solvent needed
          of the compound and the mass of the solvent.
 """
 
+def is_float(value:str) -> bool:
+    """ Check if string can be converted to a floating point value. """
+    # Code from https://www.geeksforgeeks.org/python/python-check-for-float-string/
+    
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
+
 def get_solvent_data():
     """ Get solvent data (name and density) and return a dictionary contianing
     the data """
-    print("to be implemented")
+    
+    solvent_dict : dictionary = {}
+
+    name : str = input("Enter name of the solvent: ")
+    density_str : str = input("Enter solvent density or specific gravity in g/mL: ")
+
+    # validate density_str is a floating point value
+    while not is_float(density_str):
+        print("Invalid Input: value is not a numeric value")
+        density_str : str = input("Enter solvent density or specific gravity in g/mL: ")
+    
+    density : float = float(density_str)
+
+    solvent_dict['name'] = name
+    solvent_dict['density'] = density
+
+    return solvent_dict
+
+
+
 
 def get_compound_data():
      """ Get compound data (name, density, concentration) and return a dictionary contianing the data """
