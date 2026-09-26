@@ -26,9 +26,9 @@ def get_float(prompt:str) -> float:
     # validate density_str is a floating point value
     while not is_float(value_str):
         print("Invalid Input: value is not a numeric value")
-        density_str : str = input(f"{prompt}")
+        value_str : str = input(f"{prompt}")
     
-    density : float = float(density_str)
+    return float(value_str)
 
 
 def get_data(component:str) -> dictionary:
@@ -42,6 +42,8 @@ def get_data(component:str) -> dictionary:
  
     component_dict['name'] = name
     component_dict['density'] = density
+    
+    stock_concentration : float = 0.0
 
     if component.lower() == "solute":
         solid_solute: str = input("Is the solute a solid compound? (y/n) ")
@@ -53,8 +55,9 @@ def get_data(component:str) -> dictionary:
 
             stock_concentration = get_float("Enter the stock solution concentration as a percent: ")
 
-    component_dict['concentration'] = stock_concentration
-    component_dict['solid'] = solid
+        component_dict['concentration'] = stock_concentration
+        component_dict['solid'] = solid
+    
     return component_dict
 
 
@@ -139,7 +142,7 @@ def main():
             solution_components: list = get_solution_data()
 
         for item in solution_components:
-            print solution_components[item]
+            print(item)
         
 main()
 
