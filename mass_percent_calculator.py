@@ -17,6 +17,18 @@ def is_float(value:str) -> bool:
         return True
     except ValueError:
         return False
+        
+def get_float(prompt:str) -> float:
+    """ get data that is a floating point value """
+
+    value_str : str = input(f"{prompt}")
+
+    # validate density_str is a floating point value
+    while not is_float(value_str):
+        print("Invalid Input: value is not a numeric value")
+        density_str : str = input(f"{prompt}")
+    
+    density : float = float(density_str)
 
 
 def get_data(component:str) -> dictionary:
@@ -25,34 +37,29 @@ def get_data(component:str) -> dictionary:
     component_dict :dictionary = {}
 
     name : str = input(f"Enter name of the {component}: ")
-    density_str : str = input("Enter solvent density or specific gravity in g/mL: ")
 
-    # validate density_str is a floating point value
-    while not is_float(density_str):
-        print("Invalid Input: value is not a numeric value")
-        density_str : str = input(f"Enter {component} density or specific gravity in g/mL: ")
-    
-    density : float = float(density_str)
-
+    density = get_float(f"Enter {component} density or specific gravity in g/mL: ")
+ 
     component_dict['name'] = name
     component_dict['density'] = density
 
     if component.lower() == "solute":
-        concentration_str : str = input("Enter the stock solution concentration as a percent: ")
+        solid_solute: str = input("Is the solute a solid compound? (y/n) ")
+        if solid_solute.lower() == "y":
+            solid = True
+            stock_concentration = 100
+        else:
+            solid = False
 
-        while not is_float(concentration_str):
-            print("Invalid Input: value is not a numeric value")
-            concentration_str : str = input("Enter the stock solution concentration as a percent: ")
+            stock_concentration = get_float("Enter the stock solution concentration as a percent: ")
 
-        stock_concentration : float = float(concentration_str)
-
-        component_dict['concentration'] = stock_concentration
-
+    component_dict['concentration'] = stock_concentration
+    component_dict['solid'] = solid
     return component_dict
 
 
-def compound_mass(solution_data):
-    """ calculate solution based on known compound mass """
+def solute_mass(solution_data):
+    """ calculate solution based on known solute mass """
     print("to be implemented") 
 
 
@@ -61,8 +68,8 @@ def solvent_mass(solution_data):
     print("to be implemented")
 
 
-def compound_volume(solution_data):
-    """ calculate solution based on known compound volume """
+def solute_volume(solution_data):
+    """ calculate solution based on known solute volume """
     print("to be implemented") 
 
 
@@ -78,8 +85,8 @@ def display_solution_data(solution_data):
 def display_menu():
     """ Display main menu. """
 
-    print("\n1 -- Known Compound Mass")
-    print("2 -- Known Compound Volume")
+    print("\n1 -- Known Solute Mass")
+    print("2 -- Known Solute Volume")
     print("3 -- Known Solvent Mass")
     print("4 -- Known Solvent Volume")
     print("q -- Exit Program\n")
@@ -97,13 +104,46 @@ def get_choice() -> str:
 
     return answer    
 
-def get_solution_data(solution_input):
-    """ Get data for compound, solvent, and solution concentration. """
+def get_solution_data() -> list:
+    """ Get data for solute, solvent, and solution concentration. """
 
+    # list: solute dictionary, solvent dictionary, and solution concentration in percent (float)
+
+    solution_list : list = []
+    solution_concentration = get_float("Enter the desired solution concentration as a percent: ")
+
+    solute_dict : dictionary = get_data("solute")
+    solvent_dict : dictionary = get_data("solvent")
+    
+    # create list and return it
+    solution_list.append(solute_dict)
+    solution_list.append(solvent_dict)
+    solution_list.append(solution_concentration)
+
+    return solution_list
+
+    
 def main():
     """ Main Program Logic """
 
     print("Mass Percent Solution Calculator\n")
+
+    done: bool = False
+    
+    while not done:
+        display_menu()
+        selection : str = get_choice()
+        if selection.lower() == 'q':
+            done = True
+        else:
+            solution_components: list = get_solution_data()
+
+        for item in solution_components:
+            print solution_components[item]
+        
+main()
+
+
 
     
 
