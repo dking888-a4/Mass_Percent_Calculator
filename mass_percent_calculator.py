@@ -8,6 +8,10 @@ Purpose: This program will calculate amount of a compound and a solvent needed
          of the compound and the mass of the solvent.
 """
 
+# Mass percent is defined as the mass of the solute divided by the mass of the
+# solution (solute mass + solvent mass)
+
+
 def is_float(value:str) -> bool:
     """ Check if string can be converted to a floating point value. """
     # Code from https://www.geeksforgeeks.org/python/python-check-for-float-string/
@@ -36,6 +40,7 @@ def get_data(component:str) -> dictionary:
 
     component_dict :dictionary = {}
 
+    # Get name and density of the solute or solvent
     name : str = input(f"Enter name of the {component}: ")
 
     density = get_float(f"Enter {component} density or specific gravity in g/mL: ")
@@ -43,13 +48,13 @@ def get_data(component:str) -> dictionary:
     component_dict['name'] = name
     component_dict['density'] = density
     
-    stock_concentration : float = 0.0
+    # Get concentration of the solute if it is a liquid
+    stock_concentration : float = 100.0
 
     if component.lower() == "solute":
         solid_solute: str = input("Is the solute a solid compound? (y/n) ")
         if solid_solute.lower() == "y":
             solid = True
-            stock_concentration = 100
         else:
             solid = False
 
@@ -64,15 +69,17 @@ def get_data(component:str) -> dictionary:
 def solute_mass(solution_data):
     """ calculate solution based on known solute mass """
     
-    solute_mass: float = get_float("Enter mass of solute in grams: ")
+    solute_mass: float = get_float("Enter mass of solute in grams: ") # mass of solute stock reagent
 
     solute_vol: float = solute_mass / solution_data[0]['density']
 
-    solute_mass_adj: float = solute_mass * solution_data[0]['concentration'] / 100
-
+    # calculate mass of the solute in the stock reagent
+    solute_mass_adj: float = solute_mass * solution_data[0]['concentration'] / 100 
+    
     solvent_mass: float = (100 - solution_data[2]) * solute_mass_adj / solution_data[2]
 
     if solution_data[0]['concentration'] < 90:
+        # Adjust solvent mass to account for additional solvent in the solute stock reagent.
         solvent_mass = solvent_mass - (solute_mass_adj - solute-mass)
     
     solvent_vol: float = solvent_mass / solution_data[1]['density']
@@ -87,15 +94,19 @@ def solute_mass(solution_data):
 def solvent_mass(solution_data):
     """ Calculate solution based on know solvent mass """
     
-    solvent_mass : float = get_float("Enter solvent mass in grams: ")
+    solvent_mass : float = get_float("Enter solvent mass in grams: ") # mass of solvent
 
-    solvent_vol : float = solvent_mass / solution_data[1]['density']
+    solvent_vol : float = solvent_mass / solution_data[1]['density'] 
 
+    # calcuate mass of solute needed for the solution
     solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
 
+    # calculate volume of stock reagent needed for calcuated solute mass
     solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
 
     if solution_data[0]['concentration'] < 90:
+        # Adjust solvent volume to account for additional solvent in the solute stock reagent.
+
         solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100) 
     
@@ -108,13 +119,16 @@ def solvent_mass(solution_data):
 def solute_volume(solution_data):
     """ calculate solution based on known solute volume """
     
-    solute_vol: float = get_float("Enter volume of solute in mL: ")
+    solute_vol: float = get_float("Enter volume of solute in mL: ") # volumne of solute stock reagent
 
+    # Calcuate mass of solute present in the given volume of solute stock reagent
     solute_mass: float = solute_vol * solution_data[0]['density'] * solution_data[0]['concentration'] / 100
 
+    # Calculate mass of the solvent for the given amount of solute
     solvent_mass: float = (100 - solution_data[2]) * solute_mass / solution_data[2]
 
     if solution_data[0]['concentration'] < 90:
+        # Adjust solvent mass to account for additional solvent in the solute stock reagent.
         solvent_mass = solvent_mass - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100)
     
@@ -129,15 +143,18 @@ def solute_volume(solution_data):
 def solvent_volume(solution_data) -> list:
     """ Calculate solution based on know solvent volumne """
 
-    solvent_vol : float = get_float("Enter solvent volume in mL: ")
+    solvent_vol : float = get_float("Enter solvent volume in mL: ") # volumet of solvent
 
     solvent_mass : float = solvent_vol * solution_data[1]['density']
 
+    # calcuate mass of solute needed for the solution
     solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
 
+    # calculate volume of stock reagent needed for calcuated solute mass
     solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
 
     if solution_data[0]['concentration'] < 90:
+        # Adjust solvent volume to account for additional solvent in the solute stock reagent.
         solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100) 
     
@@ -148,19 +165,23 @@ def solvent_volume(solution_data) -> list:
 
 def display_solution_calculations(solution_data: list, solution_amt: list):
     """ Display data to make solution. """
-    print(f"Amounts needed to make {solution_data[2]} percent (by mass) {solution_data[0]['name']}")
 
-    for i in range(0, 4):
-        if i < 2:
-            if i == 0:
-                print(f"Solute Mass: {solution_amt[i]} grams")
+    solute_name :str = solution_data[0]['name']
+    solvent_nmae :str = solution_data[1]['name']
+
+    print(f"Amounts needed to make {solution_data[2]} percent (by mass) {solute_name}")
+
+    for index in range(0, 4):
+        if index < 2:
+            if index == 0:
+                print(f"{solute_name} Mass: {solution_amt[index]} grams")
             else:
-                print(f"Solute Volume: {solution_amt[i]} mL")
+                print(f"{solute_name} Volume: {solution_amt[index]} mL")
         else:
-            if i == 2:
-                print(f"Solvent Mass: {solution_amt[i]} grams")
+            if index == 2:
+                print(f"{solvent_nmae} Mass: {solution_amt[index]} grams")
             else:
-                print(f"Solvent Volume: {solution_amt[i]} mL")                    
+                print(f"{solvent_nmae} Volume: {solution_amt[index]} mL")                    
 
 
 def display_menu():
@@ -197,11 +218,7 @@ def get_solution_data() -> list:
     solvent_dict : dictionary = get_data("solvent")
     
     # create list and return it
-    solution_list.append(solute_dict)
-    solution_list.append(solvent_dict)
-    solution_list.append(solution_concentration)
-
-    return solution_list
+    return [solute_dict, solvent_dict, solution_concentration]
 
     
 def main():
@@ -218,8 +235,6 @@ def main():
         
         solution_components: list = get_solution_data()
 
-        # for item in solution_components:
-        #     print(item)
         solution_amounts: list = []
         choice: int = int(selection)
 
