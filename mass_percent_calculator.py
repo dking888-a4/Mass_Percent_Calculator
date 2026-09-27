@@ -46,6 +46,10 @@ def get_data(component:str) -> dictionary:
     # Get name and density of the solute or solvent
     name : str = input(f"Enter name of the {component}: ")
 
+    while not name:
+        print("Invalid input: name should contain at least one character.")
+        name = input(f"Enter name of the {component}: ")
+
     density = get_float(f"Enter {component} density or specific gravity in g/mL: ")
  
     component_dict['name'] = name
@@ -56,6 +60,14 @@ def get_data(component:str) -> dictionary:
 
     if component.lower() == "solute":
         solid_solute: str = input("Is the solute a solid compound? (y/n) ")
+
+        # Validate input
+        valid_input: list = ['y', 'n']
+
+        while solid_solute not in valid_input:
+            print("Invalid choice: Please choose 'y' or 'n'")
+            solid_solute = input("Is the solute a solid compound? (y/n) ")
+
         if solid_solute.lower() == "y":
             solid = True
         else:
