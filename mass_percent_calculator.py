@@ -22,6 +22,8 @@ def is_float(value:str) -> bool:
     except ValueError:
         return False
         
+
+
 def get_float(prompt:str) -> float:
     """ get data that is a floating point value """
 
@@ -33,6 +35,7 @@ def get_float(prompt:str) -> float:
         value_str : str = input(f"{prompt}")
     
     return float(value_str)
+
 
 
 def get_data(component:str) -> dictionary:
@@ -66,6 +69,7 @@ def get_data(component:str) -> dictionary:
     return component_dict
 
 
+
 def solute_mass(solution_data):
     """ calculate solution based on known solute mass """
     
@@ -88,7 +92,6 @@ def solute_mass(solution_data):
 
     return solution_amt
   
-
 
 
 def solvent_mass(solution_data):
@@ -163,6 +166,7 @@ def solvent_volume(solution_data) -> list:
     return solution_amt
 
 
+
 def display_solution_calculations(solution_data: list, solution_amt: list):
     """ Display data to make solution. """
 
@@ -184,6 +188,7 @@ def display_solution_calculations(solution_data: list, solution_amt: list):
                 print(f"{solvent_nmae} Volume: {solution_amt[index]} mL")                    
 
 
+
 def display_menu():
     """ Display main menu. """
 
@@ -192,6 +197,7 @@ def display_menu():
     print("3 -- Known Solvent Mass")
     print("4 -- Known Solvent Volume")
     print("q -- Exit Program\n")
+
 
 
 def get_choice() -> str:
@@ -205,6 +211,8 @@ def get_choice() -> str:
         answer = input("Invalid choice. Please enter [1, 2, 3, 4, or q]: ")
 
     return answer    
+
+
 
 def get_solution_data() -> list:
     """ Get data for solute, solvent, and solution concentration. """
@@ -221,6 +229,7 @@ def get_solution_data() -> list:
     return [solute_dict, solvent_dict, solution_concentration]
 
     
+
 def main():
     """ Main Program Logic """
 
