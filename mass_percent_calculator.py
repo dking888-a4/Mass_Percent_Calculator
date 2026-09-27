@@ -68,21 +68,65 @@ def solute_mass(solution_data):
 
 def solvent_mass(solution_data):
     """ Calculate solution based on know solvent mass """
-    print("to be implemented")
+    
+    solvent_mass : float = get_float("Enter solvent mass in grams: ")
+
+    solvent_vol : float = solvent_mass / solution_data[1]['density']
+
+    solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
+
+    solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
+
+    if solution_data[0]['concentration'] < 90:
+        solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
+        * (100 - solution_data[0]['concentration']) / 100) 
+    
+    solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
+
+    return solution_amt
+
 
 
 def solute_volume(solution_data):
     """ calculate solution based on known solute volume """
-    print("to be implemented") 
 
 
-def solvent_volume(solution_data):
+
+def solvent_volume(solution_data) -> list:
     """ Calculate solution based on know solvent volumne """
-    print("to be implemented")
+
+    solvent_vol : float = get_float("Enter solvent volume in mL: ")
+
+    solvent_mass : float = solvent_vol * solution_data[1]['density']
+
+    solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
+
+    solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
+
+    if solution_data[0]['concentration'] < 90:
+        solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
+        * (100 - solution_data[0]['concentration']) / 100) 
+    
+    solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
+
+    return solution_amt
 
 
-def display_solution_data(solution_data):
+def display_solution_calculations(solution_data: list, solution_amt: list):
     """ Display data to make solution. """
+    print(f"Amounts needed to make {solution_data[2]} percent (by mass) {solution_data[0]['name']}")
+
+    for i in range(0, 4):
+        if i < 2:
+            if i == 0:
+                print(f"Solute Mass: {solution_amt[i]} grams")
+            else:
+                print(f"Solute Volume: {solution_amt[i]} mL")
+        else:
+            if i == 2:
+                print(f"Solvent Mass: {solution_amt[i]} grams")
+            else:
+                print(f"Solvent Volume: {solution_amt[i]} mL")                    
 
 
 def display_menu():
@@ -131,18 +175,33 @@ def main():
 
     print("Mass Percent Solution Calculator\n")
 
-    done: bool = False
     
-    while not done:
+    while True:
         display_menu()
         selection : str = get_choice()
         if selection.lower() == 'q':
-            done = True
-        else:
-            solution_components: list = get_solution_data()
+            break
+        
+        solution_components: list = get_solution_data()
 
-        for item in solution_components:
-            print(item)
+        # for item in solution_components:
+        #     print(item)
+        solution_amounts: list = []
+        choice: int = int(selection)
+
+        if choice == 1:
+            solution_amounts = solute_mass(solution_components)
+        elif choice == 2:
+            solution_amounts = solute_volume(solution_components)
+        elif choice == 3:
+            solution_amounts = solvent_mass(solution_components)
+        else:
+            solution_amounts = solvent_volume(solution_components)
+
+        display_solution_calculations(solution_components, solution_amounts)
+    
+    print("Exiting Program.")
+        
         
 main()
 
