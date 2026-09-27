@@ -108,10 +108,13 @@ def solvent_mass(solution_data):
     solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
 
     if solution_data[0]['concentration'] < 90:
-        # Adjust solvent volume to account for additional solvent in the solute stock reagent.
+        # Adjust solvent volume and solvent mass to account for additional 
+        # solvent in the solute stock reagent.
 
         solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100) 
+
+        solvent_mass = solvent_vol * solution_data[1]['density']
     
     solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
 
@@ -148,8 +151,6 @@ def solvent_volume(solution_data) -> list:
 
     solvent_vol : float = get_float("Enter solvent volume in mL: ") # volumet of solvent
 
-    solvent_mass : float = solvent_vol * solution_data[1]['density']
-
     # calcuate mass of solute needed for the solution
     solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
 
@@ -160,7 +161,9 @@ def solvent_volume(solution_data) -> list:
         # Adjust solvent volume to account for additional solvent in the solute stock reagent.
         solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100) 
-    
+
+    solvent_mass : float = solvent_vol * solution_data[1]['density']
+
     solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
 
     return solution_amt
