@@ -151,6 +151,8 @@ def solvent_volume(solution_data) -> list:
 
     solvent_vol : float = get_float("Enter solvent volume in mL: ") # volumet of solvent
 
+    solvent_mass : float = solvent_vol * solution_data[1]['density']
+
     # calcuate mass of solute needed for the solution
     solute_mass : float = solvent_mass*solution_data[2]/(100 - solution_data[2])
 
@@ -158,11 +160,11 @@ def solvent_volume(solution_data) -> list:
     solute_vol = solute_mass * 100 / solution_data[0]['concentration'] * (1 / solution_data[0]['density'])
 
     if solution_data[0]['concentration'] < 90:
-        # Adjust solvent volume to account for additional solvent in the solute stock reagent.
+        # Adjust solvent volume and mass 4to account for additional solvent in the solute stock reagent.
         solvent_vol = solvent_vol - (solute_vol * solution_data[0]['density'] \
         * (100 - solution_data[0]['concentration']) / 100) 
-
-    solvent_mass : float = solvent_vol * solution_data[1]['density']
+        
+        solvent_mass : float = solvent_vol * solution_data[1]['density']
 
     solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
 
@@ -176,21 +178,21 @@ def display_solution_calculations(solution_data: list, solution_amt: list):
     solute_name :str = solution_data[0]['name']
     solvent_nmae :str = solution_data[1]['name']
 
-    print(f"Amounts needed to make {solution_data[2]} percent (by mass) {solute_name}")
+    print(f"\nAmounts needed to make {solution_data[2]} percent (by mass) {solute_name}\n")
 
     for index in range(0, 4):
         if index < 2:
             if index == 0:
-                print(f"{solute_name} Mass: {solution_amt[index]} grams")
+                print(f"{solute_name} Mass: {solution_amt[index]:.2f} grams")
             else:
-                print(f"{solute_name} Volume: {solution_amt[index]} mL")
+                print(f"{solute_name} Volume: {solution_amt[index]:.2f} mL")
         else:
             if index == 2:
-                print(f"{solvent_nmae} Mass: {solution_amt[index]} grams")
+                print(f"{solvent_nmae} Mass: {solution_amt[index]:.2f} grams")
             else:
-                print(f"{solvent_nmae} Volume: {solution_amt[index]} mL")                    
+                print(f"{solvent_nmae} Volume: {solution_amt[index]:.2f} mL")                    
 
-
+4
 
 def display_menu():
     """ Display main menu. """
