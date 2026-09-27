@@ -63,7 +63,25 @@ def get_data(component:str) -> dictionary:
 
 def solute_mass(solution_data):
     """ calculate solution based on known solute mass """
-    print("to be implemented") 
+    
+    solute_mass: float = get_float("Enter mass of solute in grams: ")
+
+    solute_vol: float = solute_mass / solution_data[0]['density']
+
+    solute_mass_adj: float = solute_mass * solution_data[0]['concentration'] / 100
+
+    solvent_mass: float = (100 - solution_data[2]) * solute_mass_adj / solution_data[2]
+
+    if solution_data[0]['concentration'] < 90:
+        solvent_mass = solvent_mass - (solute_mass_adj - solute-mass)
+    
+    solvent_vol: float = solvent_mass / solution_data[1]['density']
+
+    solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
+
+    return solution_amt
+  
+
 
 
 def solvent_mass(solution_data):
