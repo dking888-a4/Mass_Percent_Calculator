@@ -107,6 +107,22 @@ def solvent_mass(solution_data):
 
 def solute_volume(solution_data):
     """ calculate solution based on known solute volume """
+    
+    solute_vol: float = get_float("Enter volume of solute in mL: ")
+
+    solute_mass: float = solute_vol * solution_data[0]['density'] * solution_data[0]['concentration'] / 100
+
+    solvent_mass: float = (100 - solution_data[2]) * solute_mass / solution_data[2]
+
+    if solution_data[0]['concentration'] < 90:
+        solvent_mass = solvent_mass - (solute_vol * solution_data[0]['density'] \
+        * (100 - solution_data[0]['concentration']) / 100)
+    
+    solvent_vol: float = solvent_mass / solution_data[1]['density']
+
+    solution_amt : list = [solute_mass, solute_vol, solvent_mass, solvent_vol]
+
+    return solution_amt
 
 
 
