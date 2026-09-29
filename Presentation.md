@@ -2,13 +2,7 @@
 
 ## Project 1 -- Mass Percent Solution Calculator
 
-Outline
-
-- Demo
-- Purpose
-- Sample Data
-- Challenges
-- Future Modifications and Ideas
+### Daniel King
 
 # Slide 2
 
@@ -25,9 +19,48 @@ Some time ago, I created a spreadsheet to do these calculations, although someti
 
 Since the basic equation has two unknown masses, one of them must be given either as a fixed mass or volume.
 
-## Demo
 
 # Slide 3
+
+## What went right
+
+- Having the design document from Activity 2. 
+- ideas for input and basic logic flow
+
+
+# Slide 3
+
+## Improvement
+
+- More comprehensive input validation
+    - negative numbers
+    - percents greater than 100
+
+- Spliiting the program into multiple files
+
+- Simplifying the calcuations
+
+# Slide 4
+
+## Risk and Change Management
+
+Refactoring some the code into separate functions
+
+- Floating point number validation of strings
+- A function to get data for the solute and the solvent. This code was to be in the main function, but is very similar, so I moved it to a separate function.
+
+
+# Slide 5
+
+## Actionable Advice
+
+- Have a detailed design document.
+- Start Earlier
+- Think of different approaches.
+
+
+
+# Other Thoughts
 
 ## Challenges
 
@@ -37,17 +70,14 @@ Since the basic equation has two unknown masses, one of them must be given eithe
 
 - The issue with git push to an existing github repo. I finally fixed this be installing a different distribution of Linux. That issue seems to be resolved now.
 
-# Slide 4
 
 ## Future Work
 
 - Write this as an Object Oriented Program.
 
-- Expand it to do calcutions for other solution concenration units such as Molarity, Molality, and normar percent.
+- Expand it to do calcutions for other solution concenration units such as Molarity, Molality, and normal percent.
 
 - Have it accept input from a file and write resuls to a file.
-
-# Slide 5
 
 ## Sample Data
 Known Solvent Volume
